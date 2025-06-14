@@ -21,16 +21,145 @@
       padding: 10px 0 8px;
       margin-bottom: 4px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    #galeria-runas > div:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      transform: translateY(-3px) scale(1.05);
+      background: #ede4d6;
+    }
+    .runa-modal-overlay {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      inset: 0;
+      background: rgba(10,10,10,0.82);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s;
+    }
+    .runa-modal-overlay.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0 }
+      to   { opacity: 1 }
+    }
+    .runa-modal {
+      background: #fffbe6;
+      border-radius: 16px;
+      box-shadow: 0 8px 44px rgba(0,0,0,0.18);
+      display: flex;
+      flex-direction: row;
+      gap: 32px;
+      max-width: 650px;
+      width: 98%;
+      padding: 32px 28px 28px 28px;
+      position: relative;
+      font-family: 'Roboto', Arial, sans-serif;
+      animation: modalSlideUp 0.25s;
+    }
+    @keyframes modalSlideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+    .runa-modal-img {
+      max-width: 150px;
+      border-radius: 12px;
+      margin-right: 4px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.14);
+      background: #f4efe2;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4em;
+      min-height: 150px;
+    }
+    .runa-modal-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 170px;
+    }
+    .runa-modal-nombre {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 1.7em;
+      margin-bottom: 2px;
+      color: #623c17;
+      letter-spacing: 0.04em;
+    }
+    .runa-modal-simbolo {
+      font-size: 2.4em;
+      color: #b4811e;
+      margin-bottom: 6px;
+      margin-top: -10px;
+      font-family: 'serif';
+    }
+    .runa-modal-significado {
+      font-size: 1.1em;
+      color: #7b5a2b;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    .runa-modal-interpretacion {
+      background: #f5f3eb;
+      border-radius: 7px;
+      padding: 0.8em 1em;
+      color: #333;
+      font-size: 1em;
+      margin-bottom: 6px;
+    }
+    .runa-modal-extra {
+      font-size: 0.99em;
+      margin-top: 8px;
+      color: #4b3a1a;
+    }
+    .runa-modal-close {
+      cursor: pointer;
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      font-size: 1.8em;
+      color: #a88c42;
+      background: none;
+      border: none;
+      border-radius: 50%;
+      line-height: 1;
+      transition: background 0.2s;
+      z-index: 10;
+    }
+    .runa-modal-close:hover {
+      background: #f3e3b3;
+      color: #7d5b17;
     }
     @media (max-width: 600px) {
-      #galeria-runas > div {
-        flex: 0 0 30vw;
-        min-width: 80px;
-        max-width: 31vw;
-        font-size: 0.92em;
+      .runa-modal {
+        flex-direction: column;
+        gap: 12px;
+        padding: 20px 10px 16px 10px;
+        align-items: center;
+        max-width: 95vw;
       }
-      .tirada-runas-flex { flex-direction: column !important; align-items: center !important; }
-      .tirada-runa-box { min-width: 110px !important; margin-bottom: 15px !important; }
+      .runa-modal-img {
+        margin: 0 auto 10px auto;
+        font-size: 2.7em;
+        min-width: 120px;
+        min-height: 120px;
+        max-width: 120px;
+      }
+      .runa-modal-info {
+        min-width: 0;
+        width: 97%;
+      }
+      .runa-modal-close {
+        top: 7px;
+        right: 7px;
+        font-size: 1.4em;
+      }
     }
     .tirada-runas-flex {
       display: flex; 
@@ -48,6 +177,12 @@
       padding: 12px 8px 10px;
       min-width: 130px;
       margin-bottom: 0;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .tirada-runa-box:hover, .tirada-runa-box:focus {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+      transform: translateY(-2px) scale(1.03);
+      background: #efe6d6;
     }
     .tirada-pos {
       font-size: 0.98em;
@@ -111,6 +246,8 @@
         grid-template-rows: repeat(5, auto);
       }
       .tirada-cruz-arriba, .tirada-cruz-centro, .tirada-cruz-abajo, .tirada-cruz-izquierda, .tirada-cruz-derecha { width: 100%; }
+      .tirada-runas-flex { flex-direction: column !important; align-items: center !important; }
+      .tirada-runa-box { min-width: 110px !important; margin-bottom: 15px !important; }
     }
   </style>
 </head>
@@ -207,68 +344,195 @@
     <section id="libro" class="main-section" style="display:none">
       <h2>Libro de Runas</h2>
       <div class="libro-intro">
-        <p>Este libro recopila la sabiduría y el uso de las runas, sus posturas, rituales y mensajes para la vida. Incluye también información detallada sobre distintos métodos de tirada, como la tirada simple, de tres runas y la cruz rúnica.</p>
+        <p>Este libro recopila la sabiduría y el uso de las runas, sus posturas, rituales y mensajes para la vida. Incluye también información detallada sobre distintos métodos de tirada, como la cruz rúnica y otras formas de interpretación.</p>
         <div id="libro-runas"></div>
       </div>
     </section>
   </main>
   <footer>
-    <p>&copy; 2025 Cecilia Bergoboy. Proyecto web sobre runas.</p>
+    <p>&copy; 2025 Proyecto web colaborativo sobre runas.</p>
   </footer>
+
+  <!-- MODAL RUNA -->
+  <div class="runa-modal-overlay" id="runa-modal-overlay" tabindex="-1">
+    <div class="runa-modal" role="dialog" aria-modal="true" aria-labelledby="runa-modal-nombre">
+      <button class="runa-modal-close" id="runa-modal-close" aria-label="Cerrar modal">&times;</button>
+      <div class="runa-modal-img" id="runa-modal-img"></div>
+      <div class="runa-modal-info">
+        <div class="runa-modal-nombre" id="runa-modal-nombre"></div>
+        <div class="runa-modal-simbolo" id="runa-modal-simbolo"></div>
+        <div class="runa-modal-significado" id="runa-modal-significado"></div>
+        <div class="runa-modal-interpretacion" id="runa-modal-interpretacion"></div>
+        <div class="runa-modal-extra" id="runa-modal-extra"></div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // --- Runas y Diccionario ---
+    // --- Runas y Diccionario COMPLETO ---
     const runas = [
-      { nombre: 'Fehu', simbolo: 'ᚠ', img: 'fehu.png', significado: 'Riqueza, abundancia, inicio de proyectos y recursos.' },
-      { nombre: 'Uruz', simbolo: 'ᚢ', img: 'uruz.png', significado: 'Fuerza vital, poder, salud y energía para superar desafíos.' },
-      { nombre: 'Thurisaz', simbolo: 'ᚦ', img: 'thurisaz.png', significado: 'Desafío, protección, pruebas, oportunidad de aprendizaje.' },
-      { nombre: 'Ansuz', simbolo: 'ᚨ', img: 'ansuz.png', significado: 'Palabra, comunicación, inspiración divina, mensajes.' },
-      { nombre: 'Raidho', simbolo: 'ᚱ', img: 'raidho.png', significado: 'Viaje, movimiento, evolución, camino correcto.' },
-      { nombre: 'Kenaz', simbolo: 'ᚲ', img: 'kenaz.png', significado: 'Luz, creatividad, revelaciones, apertura de caminos.' },
-      { nombre: 'Gebo', simbolo: 'ᚷ', img: 'gebo.png', significado: 'Regalo, intercambio, generosidad, equilibrio en relaciones.' },
-      { nombre: 'Wunjo', simbolo: 'ᚹ', img: 'wunjo.png', significado: 'Alegría, bienestar, éxito, armonía interior.' },
-      { nombre: 'Hagalaz', simbolo: 'ᚺ', img: 'hagalaz.png', significado: 'Cambios bruscos, pruebas, transformación necesaria.' },
-      { nombre: 'Nauthiz', simbolo: 'ᚾ', img: 'nauthiz.png', significado: 'Necesidad, carencia, resistencia, superación de obstáculos.' },
-      { nombre: 'Isa', simbolo: 'ᛁ', img: 'isa.png', significado: 'Estancamiento, pausa, paciencia, introspección.' },
-      { nombre: 'Jera', simbolo: 'ᛃ', img: 'jera.png', significado: 'Ciclo, cosecha, resultados a largo plazo, recompensa.' },
-      { nombre: 'Eihwaz', simbolo: 'ᛇ', img: 'eihwaz.png', significado: 'Resistencia, transformación, conexión con lo profundo.' },
-      { nombre: 'Perthro', simbolo: 'ᛈ', img: 'perthro.png', significado: 'Misterio, destino, intuición, secretos revelados.' },
-      { nombre: 'Algiz', simbolo: 'ᛉ', img: 'algiz.png', significado: 'Protección, guía espiritual, conexión sagrada.' },
-      { nombre: 'Sowilo', simbolo: 'ᛋ', img: 'sowilo.png', significado: 'Éxito, poder solar, claridad, victoria.' },
-      { nombre: 'Tiwaz', simbolo: 'ᛏ', img: 'tiwaz.png', significado: 'Justicia, valentía, sacrificio, integridad.' },
-      { nombre: 'Berkano', simbolo: 'ᛒ', img: 'berkano.png', significado: 'Nacimiento, crecimiento, fertilidad, nuevos comienzos.' },
-      { nombre: 'Ehwaz', simbolo: 'ᛖ', img: 'ehwaz.png', significado: 'Movimiento, progreso, confianza mutua, apoyo.' },
-      { nombre: 'Mannaz', simbolo: 'ᛗ', img: 'mannaz.png', significado: 'Humanidad, cooperación, autoconocimiento, ayuda.' },
-      { nombre: 'Laguz', simbolo: 'ᛚ', img: 'laguz.png', significado: 'Intuición, emociones, flujo, adaptabilidad.' },
-      { nombre: 'Ingwaz', simbolo: 'ᛜ', img: 'ingwaz.png', significado: 'Potencial, paz interna, culminación, descanso.' },
-      { nombre: 'Dagaz', simbolo: 'ᛞ', img: 'dagaz.png', significado: 'Despertar, transformación, nuevos paradigmas.' },
-      { nombre: 'Othala', simbolo: 'ᛟ', img: 'othala.png', significado: 'Herencia, raíces, legado, pertenencia.' }
+      { nombre: 'Fehu', simbolo: 'ᚠ', img: 'fehu.png',
+        significado: 'Riqueza, abundancia, inicio de proyectos y recursos.',
+        extra: 'Representa el ganado, la prosperidad material, la energía de inicio y la importancia de valorar lo que ya se posee. Suele indicar oportunidades de ganancia, pero también la necesidad de cuidar y compartir.',
+        interpretacion: "La energía de Fehu te invita a valorar los recursos presentes y a usarlos con sabiduría. Es momento de reconocer la abundancia en tu vida y actuar con generosidad. Puede indicar tanto el inicio de nuevas etapas prósperas como advertir sobre el desapego a lo material."
+      },
+      { nombre: 'Uruz', simbolo: 'ᚢ', img: 'uruz.png',
+        significado: 'Fuerza vital, poder, salud y energía para superar desafíos.',
+        extra: 'Conectada al buey salvaje, Uruz señala la fuerza bruta, la vitalidad y la capacidad de transformación. Invita a aprovechar el potencial interior y a aceptar los cambios que nos fortifican.',
+        interpretacion: "Uruz representa la fuerza y el coraje que habitan en tu interior. Confía en tu poder para superar cualquier desafío y transforma la adversidad en crecimiento."
+      },
+      { nombre: 'Thurisaz', simbolo: 'ᚦ', img: 'thurisaz.png',
+        significado: 'Desafío, protección, pruebas, oportunidad de aprendizaje.',
+        extra: "Simboliza el martillo de Thor y la puerta entre mundos. Puede presagiar pruebas o confrontaciones, pero también la posibilidad de superarlas con conciencia y protección.",
+        interpretacion: "Thurisaz señala pruebas necesarias para tu evolución. Enfrenta los obstáculos con conciencia; cada desafío es una oportunidad de aprender y fortalecerte."
+      },
+      { nombre: 'Ansuz', simbolo: 'ᚨ', img: 'ansuz.png',
+        significado: 'Palabra, comunicación, inspiración divina, mensajes.',
+        extra: "Ligada a Odín y la sabiduría, Ansuz indica momentos de comunicación importante, mensajes inspiradores o la necesidad de escuchar la intuición.",
+        interpretacion: "Ansuz es la voz de la inspiración y la comunicación. Escucha los mensajes que llegan a tu vida, comunícate desde el corazón y permite que la verdad se exprese."
+      },
+      { nombre: 'Raidho', simbolo: 'ᚱ', img: 'raidho.png',
+        significado: 'Viaje, movimiento, evolución, camino correcto.',
+        extra: 'Viaje físico o espiritual, la importancia de avanzar y adaptarse. Habla de ciclos, evolución y la necesidad de poner en marcha los proyectos.',
+        interpretacion: "Raidho habla de un viaje, externo o interno. Confía en el proceso, cada paso es parte del aprendizaje. El movimiento te llevará hacia el equilibrio."
+      },
+      { nombre: 'Kenaz', simbolo: 'ᚲ', img: 'kenaz.png',
+        significado: 'Luz, creatividad, revelaciones, apertura de caminos.',
+        extra: 'Simboliza la antorcha, el fuego del conocimiento, la creatividad y la claridad. Revela lo oculto y ayuda a superar la oscuridad.',
+        interpretacion: "Kenaz ilumina aquello que estaba oculto. Es tiempo de crear, de encender tu fuego interior y de dejar que tu luz guíe tu camino."
+      },
+      { nombre: 'Gebo', simbolo: 'ᚷ', img: 'gebo.png',
+        significado: 'Regalo, intercambio, generosidad, equilibrio en relaciones.',
+        extra: 'Simboliza el dar y recibir, la reciprocidad, los pactos y las alianzas. Puede señalar la llegada de una bendición o la importancia de la cooperación.',
+        interpretacion: "Gebo es el símbolo del regalo y el intercambio sano. Da y recibe con amor, busca el equilibrio en tus relaciones y acepta la ayuda que el universo te ofrece."
+      },
+      { nombre: 'Wunjo', simbolo: 'ᚹ', img: 'wunjo.png',
+        significado: 'Alegría, bienestar, éxito, armonía interior.',
+        extra: 'Representa la alegría compartida, el triunfo después de la dificultad y la llegada de la paz. Habla de plenitud y satisfacción.',
+        interpretacion: "Wunjo anuncia alegría y armonía. Permite que la gratitud y la confianza abran la puerta a la felicidad y el éxito."
+      },
+      { nombre: 'Hagalaz', simbolo: 'ᚺ', img: 'hagalaz.png',
+        significado: 'Cambios bruscos, pruebas, transformación necesaria.',
+        extra: 'La runa del granizo, transformación a través de crisis. Pide aceptar lo inesperado y comprender que todo cambio trae renovación.',
+        interpretacion: "Hagalaz aconseja aceptar los cambios repentinos y ver en ellos una oportunidad de transformación. Después de la tormenta, llega la calma."
+      },
+      { nombre: 'Nauthiz', simbolo: 'ᚾ', img: 'nauthiz.png',
+        significado: 'Necesidad, carencia, resistencia, superación de obstáculos.',
+        extra: 'Simboliza la necesidad, la escasez y la capacidad de resistir. Llama a la paciencia, al aprendizaje a través de las limitaciones y a la superación personal.',
+        interpretacion: "Nauthiz señala momentos de necesidad. Acepta tus limitaciones y aprende de ellas. La paciencia y la resiliencia son tus aliadas."
+      },
+      { nombre: 'Isa', simbolo: 'ᛁ', img: 'isa.png',
+        significado: 'Estancamiento, pausa, paciencia, introspección.',
+        extra: 'Representa el hielo, el tiempo de quietud y reflexión. Puede señalar bloqueos, pero también la oportunidad de meditar y reorientar el rumbo.',
+        interpretacion: "Isa te invita a la quietud y la reflexión. No fuerces el avance, aprovecha este tiempo para meditar y reencontrarte."
+      },
+      { nombre: 'Jera', simbolo: 'ᛃ', img: 'jera.png',
+        significado: 'Ciclo, cosecha, resultados a largo plazo, recompensa.',
+        extra: 'La runa de la cosecha y de los ciclos naturales. Indica que todo llega en su momento, recompensa al esfuerzo sostenido.',
+        interpretacion: "Jera recompensa el esfuerzo sostenido. Todo ciclo llega a su fin y la cosecha será justa. Confía en los tiempos de la vida."
+      },
+      { nombre: 'Eihwaz', simbolo: 'ᛇ', img: 'eihwaz.png',
+        significado: 'Resistencia, transformación, conexión con lo profundo.',
+        extra: 'Simboliza el tejo, la conexión entre mundos y la capacidad de superar pruebas profundas. Ayuda en procesos de transformación interior.',
+        interpretacion: "Eihwaz es transformación profunda. No temas a los cambios radicales; el renacimiento espiritual está cerca."
+      },
+      { nombre: 'Perthro', simbolo: 'ᛈ', img: 'perthro.png',
+        significado: 'Misterio, destino, intuición, secretos revelados.',
+        extra: 'Runa de la suerte, el azar y el destino. Nos habla de lo oculto, de lo que aún no puede conocerse. Invita a confiar en la intuición.',
+        interpretacion: "Perthro revela misterios y secretos. Confía en tu intuición, hay verdades ocultas que pronto saldrán a la luz."
+      },
+      { nombre: 'Algiz', simbolo: 'ᛉ', img: 'algiz.png',
+        significado: 'Protección, guía espiritual, conexión sagrada.',
+        extra: 'Simboliza el ciervo y la protección divina. Es la runa de la defensa ante los peligros y de la conexión con lo espiritual.',
+        interpretacion: "Algiz te protege y conecta con lo sagrado. Deja que la guía espiritual te oriente y protege tu energía."
+      },
+      { nombre: 'Sowilo', simbolo: 'ᛋ', img: 'sowilo.png',
+        significado: 'Éxito, poder solar, claridad, victoria.',
+        extra: 'La runa del sol, victoria sobre la oscuridad, claridad mental y energía renovada. Anuncia éxito y logros.',
+        interpretacion: "Sowilo es el sol que ilumina tu camino. Éxito, claridad y vitalidad llegan a tu vida. Es momento de avanzar con seguridad."
+      },
+      { nombre: 'Tiwaz', simbolo: 'ᛏ', img: 'tiwaz.png',
+        significado: 'Justicia, valentía, sacrificio, integridad.',
+        extra: 'Simboliza la lanza del dios Tyr, la justicia y el sacrificio por el bien común. Llama a actuar con valentía y rectitud.',
+        interpretacion: "Tiwaz exige justicia y sacrificio. Actúa con integridad, sé valiente y defiende lo que es correcto."
+      },
+      { nombre: 'Berkano', simbolo: 'ᛒ', img: 'berkano.png',
+        significado: 'Nacimiento, crecimiento, fertilidad, nuevos comienzos.',
+        extra: 'Runa de la madre, la fertilidad y la protección. Anuncia nacimientos, proyectos nuevos y crecimiento.',
+        interpretacion: "Berkano anuncia nuevos comienzos. Cuida de tus proyectos como una madre y permite que crezcan con amor."
+      },
+      { nombre: 'Ehwaz', simbolo: 'ᛖ', img: 'ehwaz.png',
+        significado: 'Movimiento, progreso, confianza mutua, apoyo.',
+        extra: 'Simboliza el caballo, los viajes y el trabajo en equipo. Habla de confianza, avances y colaboración.',
+        interpretacion: "Ehwaz habla de movimiento y colaboración. Confía en quienes te rodean y avanza hacia tus metas en compañía."
+      },
+      { nombre: 'Mannaz', simbolo: 'ᛗ', img: 'mannaz.png',
+        significado: 'Humanidad, cooperación, autoconocimiento, ayuda.',
+        extra: 'Runa del ser humano, la comunidad y la autorrealización. Llama a la introspección y a la colaboración social.',
+        interpretacion: "Mannaz es la humanidad y el autoconocimiento. Reconoce tu valor y busca el apoyo de la comunidad."
+      },
+      { nombre: 'Laguz', simbolo: 'ᛚ', img: 'laguz.png',
+        significado: 'Intuición, emociones, flujo, adaptabilidad.',
+        extra: 'Runa del agua, la intuición, la adaptabilidad y las emociones profundas. Invita a fluir y a confiar en el proceso emocional.',
+        interpretacion: "Laguz fluye como el agua. Déjate llevar por la intuición y adapta tus emociones con sabiduría."
+      },
+      { nombre: 'Ingwaz', simbolo: 'ᛜ', img: 'ingwaz.png',
+        significado: 'Potencial, paz interna, culminación, descanso.',
+        extra: 'Simboliza la semilla, el potencial oculto y la culminación de procesos. Habla de la importancia del reposo y la integración.',
+        interpretacion: "Ingwaz simboliza paz y culminación. Es tiempo de finalizar procesos y disfrutar del merecido descanso."
+      },
+      { nombre: 'Dagaz', simbolo: 'ᛞ', img: 'dagaz.png',
+        significado: 'Despertar, transformación, nuevos paradigmas.',
+        extra: 'La runa del día, del despertar y de los cambios positivos. Indica un punto de inflexión y la llegada de la claridad.',
+        interpretacion: "Dagaz es despertar y transformación. Estás a punto de vivir un cambio positivo y revelador."
+      },
+      { nombre: 'Othala', simbolo: 'ᛟ', img: 'othala.png',
+        significado: 'Herencia, raíces, legado, pertenencia.',
+        extra: 'Runa de la herencia, las tradiciones y el sentido de pertenencia. Habla de los ancestros y de la transmisión de valores.',
+        interpretacion: "Othala conecta con tus raíces. Honra tu herencia y construye tu propio legado."
+      }
     ];
-    const interpretacionesProfundas = {
-      'Fehu': "La energía de Fehu te invita a valorar los recursos presentes y a usarlos con sabiduría. Es momento de reconocer la abundancia en tu vida y actuar con generosidad.",
-      'Uruz': "Uruz representa la fuerza y el coraje que habitan en tu interior. Confía en tu poder para superar cualquier desafío y transforma la adversidad en crecimiento.",
-      'Thurisaz': "Thurisaz señala pruebas necesarias para tu evolución. Enfrenta los obstáculos con conciencia; cada desafío es una oportunidad de aprender y fortalecerte.",
-      'Ansuz': "Ansuz es la voz de la inspiración y la comunicación. Escucha los mensajes que llegan a tu vida, comunícate desde el corazón y permite que la verdad se exprese.",
-      'Raidho': "Raidho habla de un viaje, externo o interno. Confía en el proceso, cada paso es parte del aprendizaje. El movimiento te llevará hacia el equilibrio.",
-      'Kenaz': "Kenaz ilumina aquello que estaba oculto. Es tiempo de crear, de encender tu fuego interior y de dejar que tu luz guíe tu camino.",
-      'Gebo': "Gebo es el símbolo del regalo y el intercambio sano. Da y recibe con amor, busca el equilibrio en tus relaciones y acepta la ayuda que el universo te ofrece.",
-      'Wunjo': "Wunjo anuncia alegría y armonía. Permite que la gratitud y la confianza abran la puerta a la felicidad y el éxito.",
-      'Hagalaz': "Hagalaz aconseja aceptar los cambios repentinos y ver en ellos una oportunidad de transformación. Después de la tormenta, llega la calma.",
-      'Nauthiz': "Nauthiz señala momentos de necesidad. Acepta tus limitaciones y aprende de ellas. La paciencia y la resiliencia son tus aliadas.",
-      'Isa': "Isa te invita a la quietud y la reflexión. No fuerces el avance, aprovecha este tiempo para meditar y reencontrarte.",
-      'Jera': "Jera recompensa el esfuerzo sostenido. Todo ciclo llega a su fin y la cosecha será justa. Confía en los tiempos de la vida.",
-      'Eihwaz': "Eihwaz es transformación profunda. No temas a los cambios radicales; el renacimiento espiritual está cerca.",
-      'Perthro': "Perthro revela misterios y secretos. Confía en tu intuición, hay verdades ocultas que pronto saldrán a la luz.",
-      'Algiz': "Algiz te protege y conecta con lo sagrado. Deja que la guía espiritual te oriente y protege tu energía.",
-      'Sowilo': "Sowilo es el sol que ilumina tu camino. Éxito, claridad y vitalidad llegan a tu vida. Es momento de avanzar con seguridad.",
-      'Tiwaz': "Tiwaz exige justicia y sacrificio. Actúa con integridad, sé valiente y defiende lo que es correcto.",
-      'Berkano': "Berkano anuncia nuevos comienzos. Cuida de tus proyectos como una madre y permite que crezcan con amor.",
-      'Ehwaz': "Ehwaz habla de movimiento y colaboración. Confía en quienes te rodean y avanza hacia tus metas en compañía.",
-      'Mannaz': "Mannaz es la humanidad y el autoconocimiento. Reconoce tu valor y busca el apoyo de la comunidad.",
-      'Laguz': "Laguz fluye como el agua. Déjate llevar por la intuición y adapta tus emociones con sabiduría.",
-      'Ingwaz': "Ingwaz simboliza paz y culminación. Es tiempo de finalizar procesos y disfrutar del merecido descanso.",
-      'Dagaz': "Dagaz es despertar y transformación. Estás a punto de vivir un cambio positivo y revelador.",
-      'Othala': "Othala conecta con tus raíces. Honra tu herencia y construye tu propio legado."
-    };
+
+    // Modal logic compartido (galería y tirada)
+    function openRunaModalByName(nombreRuna) {
+      const idx = runas.findIndex(r => r.nombre === nombreRuna);
+      if (idx === -1) return;
+      const r = runas[idx];
+      const modalOverlay = document.getElementById('runa-modal-overlay');
+      const closeModalBtn = document.getElementById('runa-modal-close');
+      const modalImg = document.getElementById('runa-modal-img');
+      const modalNombre = document.getElementById('runa-modal-nombre');
+      const modalSimbolo = document.getElementById('runa-modal-simbolo');
+      const modalSignificado = document.getElementById('runa-modal-significado');
+      const modalInterpretacion = document.getElementById('runa-modal-interpretacion');
+      const modalExtra = document.getElementById('runa-modal-extra');
+      modalImg.innerHTML = `<img src="img/runas/${r.img}" alt="${r.nombre}" style="max-width:100%;max-height:140px;display:block;margin:0 auto 6px;"><span style="font-size:2.7em;">${r.simbolo}</span>`;
+      modalNombre.textContent = r.nombre;
+      modalSimbolo.textContent = r.simbolo;
+      modalSignificado.textContent = r.significado || '';
+      modalInterpretacion.textContent = r.interpretacion || '';
+      modalExtra.textContent = r.extra || '';
+      modalOverlay.classList.add('active');
+      document.body.style.overflow = "hidden";
+      closeModalBtn.focus();
+    }
+    function activarModalEnTiradas() {
+      document.querySelectorAll('.tirada-runa-box').forEach(box => {
+        const nombre = box.querySelector('.tirada-nombre')?.textContent;
+        if (nombre) {
+          box.style.cursor = "pointer";
+          box.title = "Ver detalles de la runa";
+          box.addEventListener('click', () => openRunaModalByName(nombre));
+          box.addEventListener('keydown', (e) => {
+            if(e.key === "Enter" || e.key === " ") {
+              openRunaModalByName(nombre);
+              e.preventDefault();
+            }
+          });
+          box.tabIndex = 0;
+        }
+      });
+    }
 
     // SPA navigation
     document.addEventListener('DOMContentLoaded', function() {
@@ -296,16 +560,40 @@
       sections.forEach((sec, i) => sec.style.display = i === 0 ? '' : 'none');
     });
 
-    // Galería visual de runas
+    // Galería visual de runas con click para modal
     document.addEventListener('DOMContentLoaded', function() {
       const galeria = document.getElementById('galeria-runas');
-      galeria.innerHTML = runas.map(r => `
-        <div>
+      galeria.innerHTML = runas.map((r, idx) => `
+        <div data-idx="${idx}" tabindex="0" aria-label="Ver detalles de ${r.nombre}">
           <span style="font-size:2.4em;display:block;">${r.simbolo}</span>
           <img src="img/runas/${r.img}" alt="${r.nombre}" style="max-width:60px;display:block;margin:0 auto 8px;">
           <span style="font-weight:bold;">${r.nombre}</span>
         </div>
       `).join('');
+      galeria.querySelectorAll('div[data-idx]').forEach(div => {
+        div.addEventListener('click', () => openRunaModalByName(runas[div.dataset.idx].nombre));
+        div.addEventListener('keydown', (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            openRunaModalByName(runas[div.dataset.idx].nombre);
+            e.preventDefault();
+          }
+        });
+      });
+
+      // Modal close logic (compartido)
+      const modalOverlay = document.getElementById('runa-modal-overlay');
+      const closeModalBtn = document.getElementById('runa-modal-close');
+      closeModalBtn.addEventListener('click', closeModal);
+      modalOverlay.addEventListener('click', function(e) {
+        if (e.target === modalOverlay) closeModal();
+      });
+      document.addEventListener('keydown', function(e){
+        if (modalOverlay.classList.contains('active') && e.key === "Escape") closeModal();
+      });
+      function closeModal() {
+        modalOverlay.classList.remove('active');
+        document.body.style.overflow = "";
+      }
     });
 
     // Tirada
@@ -361,11 +649,12 @@
                 <div class="tirada-significado">${runa.significado}</div>
                 <div class="tirada-adivinacion">
                   <b>Adivinación profunda:</b><br>
-                  ${interpretacionesProfundas[runa.nombre] || ''}
+                  ${runa.interpretacion || ''}
                 </div>
               </div>
             </div>
           `;
+          activarModalEnTiradas();
         } else if (tipoSeleccionado === 'tres') {
           const posiciones = ['Pasado', 'Presente', 'Futuro'];
           const extraidas = sacarRunas(3);
@@ -380,12 +669,13 @@
                   <div class="tirada-significado">${runa.significado}</div>
                   <div class="tirada-adivinacion">
                     <b>Análisis:</b><br>
-                    ${interpretacionesProfundas[runa.nombre] || ''}
+                    ${runa.interpretacion || ''}
                   </div>
                 </div>
               `).join('')}
             </div>
           `;
+          activarModalEnTiradas();
         } else if (tipoSeleccionado === 'cruz') {
           const posiciones = [
             { pos: 'Centro', label: 'Tú / Ahora', class: 'tirada-cruz-centro' },
@@ -398,7 +688,7 @@
           tiradaResultado.innerHTML = `
             <div class="tirada-cruz-layout">
               ${posiciones.map((p, idx) => `
-                <div class="${p.class}">
+                <div class="${p.class} tirada-runa-box">
                   <div class="tirada-pos">${p.pos}<br><span style="font-size:0.93em;font-weight:normal;">${p.label}</span></div>
                   <span class="tirada-simbolo">${extraidas[idx].simbolo}</span>
                   <span class="tirada-nombre">${extraidas[idx].nombre}</span>
@@ -406,12 +696,13 @@
                   <div class="tirada-significado">${extraidas[idx].significado}</div>
                   <div class="tirada-adivinacion">
                     <b>Interpretación:</b><br>
-                    ${interpretacionesProfundas[extraidas[idx].nombre] || ''}
+                    ${extraidas[idx].interpretacion || ''}
                   </div>
                 </div>
               `).join('')}
             </div>
           `;
+          activarModalEnTiradas();
         }
       });
     });
